@@ -26,7 +26,7 @@ main : Svg.Svg msg
 main =
     let
         triangles =
-            divideTriangles 6 createTrianglesCircle
+            divideTriangles 5 createTrianglesCircle
 
         svgTriangles =
             List.map drawTriangle triangles
