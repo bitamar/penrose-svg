@@ -22,12 +22,26 @@ type alias Triangle =
     }
 
 
+main : Svg.Svg msg
+main =
+    let
+        triangles =
+            divideTriangles 6 createTrianglesCircle
+
+        svgTriangles =
+            List.map drawTriangle triangles
+    in
+        svg
+            [ SvgA.version "1.1", SvgA.viewBox "-120 -120 300 300" ]
+            svgTriangles
+
+
 createTrianglesCircle : List Triangle
 createTrianglesCircle =
     let
         createTriangle i =
             let
-                -- Alternate direction between -1 and 1.
+                -- Alternate angle factor between -1 and 1.
                 b_ =
                     2 * (i % 2) - 1
 
@@ -42,32 +56,18 @@ createTrianglesCircle =
                     }
             in
                 triangle
-
-        -- moveTriangleByPoint triangle <| fromTuple ( 100, 100 )
     in
         List.map createTriangle <| List.range 1 10
 
 
-main : Svg.Svg msg
-main =
-    let
-        triangles =
-            createTrianglesCircle
+divideTriangles : Int -> List Triangle -> List Triangle
+divideTriangles n triangles =
+    case n of
+        0 ->
+            triangles
 
-        triangles_ =
-            divideTriangles triangles
-
-        -- divideTriangles <| divideTriangles <| divideTriangles triangles
-    in
-        svg
-            [ SvgA.version "1.1", SvgA.viewBox "-100 -100 300 300" ]
-        <|
-            List.map drawTriangle triangles_
-
-
-divideTriangles : List Triangle -> List Triangle
-divideTriangles triangles =
-    List.concatMap divideTriangle triangles
+        _ ->
+            divideTriangles (n - 1) <| List.concatMap divideTriangle triangles
 
 
 divideTriangle : Triangle -> List Triangle
@@ -80,7 +80,7 @@ divideTriangle triangle =
             T36 ->
                 let
                     p =
-                        scale (1 / phi) <| add triangle.a (sub triangle.b triangle.a)
+                        add triangle.a <| scale (1 / phi) <| (sub triangle.b triangle.a)
 
                     triangle_ =
                         createTriangle triangle.c p triangle.b T36
@@ -93,10 +93,10 @@ divideTriangle triangle =
             T108 ->
                 let
                     p1 =
-                        scale (1 / phi) <| add triangle.b (sub triangle.a triangle.b)
+                        add triangle.b <| scale (1 / phi) <| (sub triangle.a triangle.b)
 
                     p2 =
-                        scale (1 / phi) <| add triangle.b (sub triangle.c triangle.b)
+                        add triangle.b <| scale (1 / phi) <| (sub triangle.c triangle.b)
 
                     triangle_ =
                         createTriangle p2 triangle.c triangle.a T108
@@ -133,17 +133,8 @@ drawTriangle triangle =
         polygon
             [ SvgA.fill color
             , SvgA.points <| toString (getX triangle.a) ++ "," ++ toString (getY triangle.a) ++ " " ++ toString (getX triangle.b) ++ "," ++ toString (getY triangle.b) ++ " " ++ toString (getX triangle.c) ++ "," ++ toString (getY triangle.c)
-            , SvgA.fillOpacity "0.4"
-            , SvgA.stroke "white"
-            , SvgA.strokeWidth "0.1"
+            , SvgA.fillOpacity "0.5"
+            , SvgA.stroke "#ffdbe7"
+            , SvgA.strokeWidth "0.01"
             ]
             []
-
-
-moveTriangleByPoint : Triangle -> Point -> Triangle
-moveTriangleByPoint triangle point =
-    { a = add triangle.a point
-    , b = add triangle.b point
-    , c = add triangle.c point
-    , triangleType = triangle.triangleType
-    }
