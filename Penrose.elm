@@ -27,14 +27,23 @@ createTrianglesCircle =
     let
         createTriangle i =
             let
+                -- Alternate direction between -1 and 1.
+                b_ =
+                    2 * (i % 2) - 1
+
+                c_ =
+                    -1 * b_
+
                 triangle =
                     { a = fromTuple ( 0, 0 )
-                    , b = fromTuple <| fromPolar ( 100, (2 * toFloat i - 1) * pi / 10 )
-                    , c = fromTuple <| fromPolar ( 100, (2 * toFloat i + 1) * pi / 10 )
+                    , b = fromTuple <| fromPolar ( 100, toFloat (2 * i + b_) * pi / 10 )
+                    , c = fromTuple <| fromPolar ( 100, toFloat (2 * i + c_) * pi / 10 )
                     , triangleType = T36
                     }
             in
-                moveTriangleByPoint triangle <| fromTuple ( 100, 100 )
+                triangle
+
+        -- moveTriangleByPoint triangle <| fromTuple ( 100, 100 )
     in
         List.map createTriangle <| List.range 1 10
 
@@ -46,10 +55,12 @@ main =
             createTrianglesCircle
 
         triangles_ =
-            divideTriangles <| divideTriangles triangles
+            divideTriangles triangles
+
+        -- divideTriangles <| divideTriangles <| divideTriangles triangles
     in
         svg
-            [ SvgA.version "1.1", SvgA.viewBox "0 0 300 300" ]
+            [ SvgA.version "1.1", SvgA.viewBox "-100 -100 300 300" ]
         <|
             List.map drawTriangle triangles_
 
