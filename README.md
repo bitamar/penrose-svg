@@ -1,5 +1,7 @@
 Elm SVG Penrose tiler
 
+![](https://bitamar.github.io/penrose-svg/sample.svg)
+
 Based on Jeff Preshing's python implementation: 
 http://preshing.com/20110831/penrose-tiling-explained/
 
