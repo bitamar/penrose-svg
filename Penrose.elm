@@ -26,7 +26,10 @@ main : Svg.Svg msg
 main =
     let
         triangles =
-            divideTriangles 5 createTrianglesCircle
+            divideTriangles 6 createTrianglesCircle
+
+        _ =
+            Debug.log "triangles count" <| List.length triangles
 
         svgTriangles =
             List.map drawTriangle triangles
@@ -67,7 +70,7 @@ divideTriangles n triangles =
             triangles
 
         _ ->
-            divideTriangles (n - 1) <| List.concatMap divideTriangle triangles
+            List.append triangles <| divideTriangles (n - 1) <| List.concatMap divideTriangle triangles
 
 
 divideTriangle : Triangle -> List Triangle
@@ -88,7 +91,7 @@ divideTriangle triangle =
                     triangle__ =
                         createTriangle p triangle.c triangle.a T108
                 in
-                    [ triangle, triangle_, triangle__ ]
+                    [ triangle_, triangle__ ]
 
             T108 ->
                 let
@@ -107,7 +110,7 @@ divideTriangle triangle =
                     triangle___ =
                         createTriangle p2 p1 triangle.a T36
                 in
-                    [ triangle, triangle_, triangle__, triangle___ ]
+                    [ triangle_, triangle__, triangle___ ]
 
 
 createTriangle : Point -> Point -> Point -> TriangleType -> Triangle

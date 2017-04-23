@@ -8433,15 +8433,11 @@ var _user$project$Main$divideTriangle = function (triangle) {
 		var triangle__ = A4(_user$project$Main$createTriangle, p, triangle.c, triangle.a, _user$project$Main$T108);
 		return {
 			ctor: '::',
-			_0: triangle,
+			_0: triangle_,
 			_1: {
 				ctor: '::',
-				_0: triangle_,
-				_1: {
-					ctor: '::',
-					_0: triangle__,
-					_1: {ctor: '[]'}
-				}
+				_0: triangle__,
+				_1: {ctor: '[]'}
 			}
 		};
 	} else {
@@ -8464,18 +8460,14 @@ var _user$project$Main$divideTriangle = function (triangle) {
 		var triangle___ = A4(_user$project$Main$createTriangle, p2, p1, triangle.a, _user$project$Main$T36);
 		return {
 			ctor: '::',
-			_0: triangle,
+			_0: triangle_,
 			_1: {
 				ctor: '::',
-				_0: triangle_,
+				_0: triangle__,
 				_1: {
 					ctor: '::',
-					_0: triangle__,
-					_1: {
-						ctor: '::',
-						_0: triangle___,
-						_1: {ctor: '[]'}
-					}
+					_0: triangle___,
+					_1: {ctor: '[]'}
 				}
 			}
 		};
@@ -8483,23 +8475,26 @@ var _user$project$Main$divideTriangle = function (triangle) {
 };
 var _user$project$Main$divideTriangles = F2(
 	function (n, triangles) {
-		divideTriangles:
-		while (true) {
-			var _p2 = n;
-			if (_p2 === 0) {
-				return triangles;
-			} else {
-				var _v3 = n - 1,
-					_v4 = A2(_elm_lang$core$List$concatMap, _user$project$Main$divideTriangle, triangles);
-				n = _v3;
-				triangles = _v4;
-				continue divideTriangles;
-			}
+		var _p2 = n;
+		if (_p2 === 0) {
+			return triangles;
+		} else {
+			return A2(
+				_elm_lang$core$List$append,
+				triangles,
+				A2(
+					_user$project$Main$divideTriangles,
+					n - 1,
+					A2(_elm_lang$core$List$concatMap, _user$project$Main$divideTriangle, triangles)));
 		}
 	});
 var _user$project$Main$main = _elm_lang$virtual_dom$Native_VirtualDom.staticProgram(
 	function () {
-		var triangles = A2(_user$project$Main$divideTriangles, 5, _user$project$Main$createTrianglesCircle);
+		var triangles = A2(_user$project$Main$divideTriangles, 6, _user$project$Main$createTrianglesCircle);
+		var _p3 = A2(
+			_elm_lang$core$Debug$log,
+			'triangles count',
+			_elm_lang$core$List$length(triangles));
 		var svgTriangles = A2(_elm_lang$core$List$map, _user$project$Main$drawTriangle, triangles);
 		return A2(
 			_elm_lang$svg$Svg$svg,
